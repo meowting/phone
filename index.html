@@ -683,7 +683,7 @@ input[type="text"], input[type="number"], select {
 .modal-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: var(--modal-overlay);
+  background: transparent;
   display: none;
   align-items: center;
   justify-content: center;
@@ -1743,6 +1743,25 @@ img {
 }
   
 </style>
+<!-- PWA 配置：让网页像 App 一样安装到手机桌面 -->
+<link rel="manifest" href="data:application/manifest+json,{
+  %22name%22:%22喵の小手机%22,
+  %22short_name%22:%22喵の手机%22,
+  %22start_url%22:%22.%2F%22,
+  %22display%22:%22standalone%22,
+  %22background_color%22:%22%23FFF0F3%22,
+  %22theme_color%22:%22%23FF85A2%22,
+  %22icons%22:[{
+  %22src%22:%22https://i.ibb.co/rDfP77z/retouch-2026062601300656.jpg%22,
+  %22sizes%22:%22512x512%22,
+  %22type%22:%22image/jpeg%22,
+  %22purpose%22:%22any%20maskable%22
+}]
+}">
+<link rel="apple-touch-icon" href="https://i.ibb.co/rDfP77z/retouch-2026062601300656.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FF85A2">
 </head>
 <body>
 
@@ -1755,7 +1774,9 @@ img {
        <!-- ========== 角色选择 - 欢迎页 ========== -->
     <div class="page active" id="roleWelcomePage">
       <div class="role-welcome-container">
-        <div class="role-welcome-icon">🐱</div>
+        <div class="role-welcome-icon">
+  <img src="https://i.ibb.co/rDfP77z/retouch-2026062601300656.jpg" style="width:80px; height:80px; border-radius:16px; object-fit:cover;">
+</div>
         <div class="role-welcome-title">欢迎来到喵の手机</div>
         <div class="role-welcome-subtitle">请创建你的身份</div>
         <button class="role-welcome-btn preset-btn" onclick="showPresetSelect()">
@@ -8128,8 +8149,35 @@ document.addEventListener('click', function(e) {
   }
 }, true);
 
+  // 首次访问提示：推荐使用Chrome浏览器获得完整体验
+(function() {
+  if (localStorage.getItem('meow_browser_tip_shown')) return;
+  const ua = navigator.userAgent.toLowerCase();
+  const isAndroid = ua.includes('android');
+  const isChrome = ua.includes('chrome') && !ua.includes('edg');
+  
+  if (isAndroid && !isChrome) {
+    setTimeout(() => {
+      showConfirm('📱 完整体验提示', 
+        '推荐使用 <b>Chrome 浏览器</b> 打开本游戏，<br>可将其安装到手机桌面，像真正的 App 一样全屏运行！<br><br>当前浏览器可正常游玩，但无法安装到桌面。',
+        function() {}
+      );
+      localStorage.setItem('meow_browser_tip_shown', '1');
+    }, 2000);
+  }
+})();
+  
 document.addEventListener('DOMContentLoaded', init);
 </script>
 <!-- <script src="api.js"></script> -->
+  <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register("data:application/javascript," + encodeURIComponent(
+      "const CACHE='meow-v1';self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/'])).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})"
+    ));
+  });
+}
+</script>
 </body>
 </html>
