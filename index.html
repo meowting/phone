@@ -6641,7 +6641,7 @@ function refreshChatMessages() {
 }   // ← 这是 refreshChatMessages 的结束大括号
 // 对方回复
 function replyFromContact(contactId) {
-  
+  const player = GAME_STATE.playerCharacter;
   // 检测是否在和李飞聊工资
   if (contactId === 'lifei') {
     const lastMsg = getLastPlayerMessage(contactId);
