@@ -1744,6 +1744,7 @@ img {
   
 </style>
 <!-- PWA 配置：让网页像 App 一样安装到手机桌面 -->
+ <link rel="icon" href="https://i.ibb.co/rDfP77z/retouch-2026062601300656.jpg">
 <link rel="manifest" href="data:application/manifest+json,{
   %22name%22:%22喵の小手机%22,
   %22short_name%22:%22喵の手机%22,
@@ -2816,7 +2817,6 @@ function showPage(pageName) {
   };
 
   const target = document.getElementById(map[pageName]);
-  console.log('尝试显示页面:', pageName, '元素ID:', map[pageName], '找到的元素:', target);
   if (target) {
     target.classList.add('active');
     target.style.display = 'flex';   // 让目标页面正常显示
@@ -6420,7 +6420,7 @@ function renderWechatChatInterface(contactId) {
 
   body.innerHTML = `
     <div class="chat-container" style="display:flex; flex-direction:column; height:100%;">
-     <div class="chat-messages" id="chatMessages" style="${bgStyle}">
+     <div class="chat-messages" id="chatMessages" style="flex:1; overflow-y:auto; ${bgStyle}">
         ${messagesHtml || '<div style="text-align:center;color:#ccc;padding:40px;">开始聊天吧~</div>'}
       </div>
       <div class="chat-input-bar">
@@ -8541,7 +8541,7 @@ document.addEventListener('DOMContentLoaded', init);
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register("data:application/javascript," + encodeURIComponent(
-      "const CACHE='meow-v1';self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/'])).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})"
+      "const CACHE='meow-v2';self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/'])).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})"
     ));
   });
 }
