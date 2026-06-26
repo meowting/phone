@@ -6722,16 +6722,26 @@ function replyFromContact(contactId) {
     reply += ` 看在你比较懂事的份上，多给你${bonus}元。`;
   }
 
+  // 先发文字消息
+  addChatMessage(contactId, { type: 'text', sender: 'them', text: reply });
+
+  // 如果金额大于0，发转账卡片（玩家需点击收款，钱才到账）
   if (baseAmount > 0) {
-    GAME_STATE.stats.money = (GAME_STATE.stats.money || 0) + baseAmount;
-    addBillRecord('income', baseAmount, '公司发薪', '老板发的工资');
+    const transferId = 'tf_salary_' + Date.now();
+    addChatMessage(contactId, {
+      id: transferId,
+      type: 'transfer',
+      sender: 'them',
+      amount: baseAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      amountWan: baseAmount,
+      note: '老板发的工资',
+      status: 'pending'
+    });
   }
 
-  addChatMessage(contactId, { type: 'text', sender: 'them', text: reply });
   refreshChatMessages();
   saveState();
 }
-
 // API回复（高自由度版）
 function replyFromAPI(contactId) {
   const player = GAME_STATE.playerCharacter;
@@ -6788,6 +6798,14 @@ ${contextStr || '(这是你们的第一次对话)'}
 - 好感度80以上：亲密红包（任意金额上不封顶），表示爱意、吃醋、欲望、控制欲、占有欲或非常想念等可以自定义。
 - 转账备注可以浪漫、霸道或温柔，符合你的性格和关系，可转有特殊含义的金额如 52、66、88、99、520、666、888、1314、5200 等等可以自定义。
 - 如果没有特别必要，也可以不发，自由决定。
+**示范回复（这是内部逻辑，你不需要输出示范文字）：**
+如果你决定发红包，你的完整回复应该像这样：
+{
+  "messages": [
+    {"type": "text", "text": "我也想你。"},
+    {"type": "transfer", "amount": 520.00, "note": "别收别人的红包"}
+  ]
+}
 
 请严格按照以下JSON格式回复，不要包含任何其他文字：
 {
