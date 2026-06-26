@@ -6699,16 +6699,16 @@ function replyFromContact(contactId) {
   let reply = '';
 
   if (influence >= 80) {
-    baseAmount = 10000 + Math.floor(Math.random() * 5000);
+    baseAmount = 10000 + Math.floor(Math.random() * 10000);
     reply = `最近表现不错，给你发点奖金。${baseAmount}元已到账。`;
   } else if (influence >= 50) {
-    baseAmount = 5000 + Math.floor(Math.random() * 3000);
+    baseAmount = 5000 + Math.floor(Math.random() * 5000);
     reply = `还行，继续加油。先给你发${baseAmount}元。`;
   } else if (influence >= 30) {
-    baseAmount = 1000 + Math.floor(Math.random() * 500);
+    baseAmount = 3000 + Math.floor(Math.random() * 3000);
     reply = `钱不是那么好赚的。拿去吧，${baseAmount}元。`;
   } else if (influence >= 10) {
-    baseAmount = 500 + Math.floor(Math.random() * 200);
+    baseAmount = 500 + Math.floor(Math.random() * 500);
     reply = `就这点影响力还找我要钱？${baseAmount}元，省着点花。`;
   } else {
     baseAmount = 0;
